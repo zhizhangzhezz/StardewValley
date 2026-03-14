@@ -31,34 +31,38 @@ public class Player : SingletonMonobehaviour<Player>
 
         if (!PlayerInputIsDisabled)
         {
-            ResetAnimationTriggers();
             PlayerMovementInput();
+            ResetAnimationTriggers();
             PlayerWalkInput();
         }
 
 
     }
 
-    // 移动必须放在 FixedUpdate
+    // 移动放在 FixedUpdate
     private void FixedUpdate()
     {
+
         PlayerMovement();
         EventHandler.CallMovementEvent(parameters);
     }
 
+
     private void PlayerMovement()
     {
-        Vector2 inputDir = new Vector2(parameters.inputX, parameters.inputY).normalized;
-        Vector2 move = inputDir * movementSpeed * Time.fixedDeltaTime;
-        Vector2 targetPos = rb.position + move;
 
-        //// 像素对齐
-        //targetPos.x = Mathf.Round(targetPos.x / PIXEL_STEP) * PIXEL_STEP;
-        //targetPos.y = Mathf.Round(targetPos.y / PIXEL_STEP) * PIXEL_STEP;
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        float vertical = Input.GetAxisRaw("Vertical");
+        Vector2 inputDir = new Vector2(horizontal, vertical).normalized;
+        Vector2 move = inputDir * movementSpeed * Time.smoothDeltaTime;
 
-        rb.MovePosition(targetPos);
+        // 玩家平滑移动（不进行像素对齐，让相机处理）
+        rb.MovePosition(rb.position + move);
     }
+    private void LateUpdate()
+    {
 
+    }
     private void PlayerWalkInput()
     {
         if (Input.GetKey(KeyCode.LeftShift))
@@ -79,6 +83,8 @@ public class Player : SingletonMonobehaviour<Player>
     {
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
+
+
 
         // 干净的输入
         parameters.inputX = horizontal;

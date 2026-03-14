@@ -8,7 +8,7 @@ public static class Settings
     public const float targetAlpha = 0.45f;
 
     //player movement
-    public const float runningSpeed = 5.333f;
+    public const float runningSpeed = 8f;
     public const float walkingSpeed = 2.666f;
 
     //Inventory
@@ -47,6 +47,14 @@ public static class Settings
     public static int idleDown;
     public static int idleLeft;
     public static int idleRight;
+
+    //工具
+    public const string HoeingTool = "Hoe";
+    public const string ChoppingTool = "Axe";
+    public const string BreakingTool = "Pickaxe";
+    public const string ReapingTool = "Scythe";
+    public const string WateringTool = "Watering Can";
+    public const string CollectingTool = "Basket";
 
     // Static constructor
     static Settings()

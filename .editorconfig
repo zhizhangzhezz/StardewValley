@@ -1,0 +1,13 @@
+[*.cs]
+dotnet_diagnostic.CS0618.severity = silent
+dotnet_diagnostic.CS0612.severity = silent
+
+[**/Library/PackageCache/**/*.cs]
+dotnet_diagnostic.CS0618.severity = silent
+dotnet_diagnostic.CS0612.severity = silent
+dotnet_diagnostic.*.severity = none
+
+[**/Library/**/*.cs]
+dotnet_diagnostic.CS0618.severity = silent
+dotnet_diagnostic.CS0612.severity = silent
+dotnet_diagnostic.*.severity = none

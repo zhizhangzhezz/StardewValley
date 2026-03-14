@@ -1,0 +1,10 @@
+{
+  "fileOptions": {
+    "excludeSearchPatterns": [
+      "**/Library/PackageCache/**",
+      "**/Library/Temp/**",
+      "**/Library/Obj/**",
+      "**/Library/BuildPlayerData/**"
+    ]
+  }
+}

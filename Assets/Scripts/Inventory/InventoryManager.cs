@@ -117,6 +117,28 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
         }
     }
 
+    //返回物品描述
+    public string GetItemTypeDescription(ItemType itemType)
+    {
+        switch (itemType)
+        {
+            case ItemType.HoeingTool:
+                return Settings.HoeingTool;
+            case ItemType.ChoppingTool:
+                return Settings.ChoppingTool;
+            case ItemType.BreakingTool:
+                return Settings.BreakingTool;
+            case ItemType.ReapingTool:
+                return Settings.ReapingTool;
+            case ItemType.WateringTool:
+                return Settings.WateringTool;
+            case ItemType.CollectingTool:
+                return Settings.CollectingTool;
+            default:
+                return itemType.ToString();
+        }
+    }
+
     public void RemoveItem(InventoryLocation inventoryLocation, int itemCode)
     {
         List<InventoryItem> inventoryList = inventoryLists[(int)inventoryLocation];
@@ -145,6 +167,20 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
             inventoryList.RemoveAt(itemPosition);
         }
 
+    }
+
+    //交换物品
+    public void SwapInventoryItems(InventoryLocation inventoryLocation, int fromItem, int toItem)
+    {
+        if (fromItem < inventoryLists[(int)inventoryLocation].Count && toItem < inventoryLists[(int)inventoryLocation].Count && fromItem != toItem && fromItem >= 0 && toItem >= 0)
+        {
+            InventoryItem fromInventoryItem = inventoryLists[(int)inventoryLocation][fromItem];
+            InventoryItem toInventoryItem = inventoryLists[(int)inventoryLocation][toItem];
+            inventoryLists[(int)inventoryLocation][fromItem] = toInventoryItem;
+            inventoryLists[(int)inventoryLocation][toItem] = fromInventoryItem;
+
+            EventHandler.CallInventoryUpdatedEvent(inventoryLocation, inventoryLists[(int)inventoryLocation]);
+        }
     }
 
     private void DebugPrintInventoryList(List<InventoryItem> inventoryList)

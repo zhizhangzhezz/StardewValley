@@ -1,27 +1,37 @@
-﻿using UnityEngine;
+﻿﻿﻿﻿﻿﻿﻿﻿using UnityEngine;
 using Cinemachine;
 
 public class SwitchConfineBoundingShape : MonoBehaviour
 {
-    // Start is called before the first frame update
     void Start()
     {
         SwitchBoundingShape();
     }
 
-    //switch the collider that cinemachine users to define the edge of the screen
-private void SwitchBoundingShape()
+    private void SwitchBoundingShape()
     {
-        //get the polygon collider on the 'boundsconfiner' gameobject which is used by Cinemachine to prevent the camera going beyond the screen edges
-        PolygonCollider2D polygonCollider2D = GameObject.FindGameObjectWithTag(Tags.BoundsConfiner).GetComponent<PolygonCollider2D>();
+        GameObject confinerObj = GameObject.FindGameObjectWithTag(Tags.BoundsConfiner);
+        if (confinerObj == null)
+        {
+            Debug.LogError("找不到标签为 " + Tags.BoundsConfiner + " 的物体！");
+            return;
+        }
+
+        PolygonCollider2D polygonCollider2D = confinerObj.GetComponent<PolygonCollider2D>();
+        if (polygonCollider2D == null)
+        {
+            Debug.LogError("BoundsConfiner 物体上没有 PolygonCollider2D 组件！");
+            return;
+        }
 
         CinemachineConfiner cinemachineConfiner = GetComponent<CinemachineConfiner>();
+        if (cinemachineConfiner == null)
+        {
+            Debug.LogError("Virtual Camera 上没有 CinemachineConfiner 组件！请先添加扩展。");
+            return;
+        }
 
         cinemachineConfiner.m_BoundingShape2D = polygonCollider2D;
-
-        //since the  confiner bounds have changed need to call this to clear the cache
-
         cinemachineConfiner.InvalidatePathCache();
-
     }
 }
