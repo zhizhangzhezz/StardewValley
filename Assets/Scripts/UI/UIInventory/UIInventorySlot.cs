@@ -155,6 +155,15 @@ public class UIInventorySlot : MonoBehaviour, IDragHandler, IBeginDragHandler, I
         isSelected = true;
         inventoryBar.SetHighlightOnInventorySlots();
         InventoryManager.Instance.SetSelectedInventoryItem(InventoryLocation.player, itemDetails.itemCode);
+        //如果物品可以被携带,则显示在玩家手上
+        if (itemDetails.canBeCarried)
+        {
+            Player.Instance.ShowCarriedItem(itemDetails.itemCode);
+        }
+        else
+        {
+            Player.Instance.ClearCarriedItem();
+        }
     }
     //清除选中物品
     private void ClearSelectedItem()
@@ -162,6 +171,8 @@ public class UIInventorySlot : MonoBehaviour, IDragHandler, IBeginDragHandler, I
         inventoryBar.ClearHighlightOnInventorySlots();
         isSelected = false;
         InventoryManager.Instance.ClearSelectedInventoryItem(InventoryLocation.player);
+
+        Player.Instance.ClearCarriedItem();
     }
     private void DestoryTextBox()
     {
