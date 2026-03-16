@@ -41,6 +41,7 @@ public class UIInventoryBar : MonoBehaviour
                 inventorySlot[i].textMeshProUGUI.text = "";
                 inventorySlot[i].itemDetails = null;
                 inventorySlot[i].itemQuantity = 0;
+                SetHighlightOnInventorySlot(i);
             }
         }
     }
@@ -64,7 +65,7 @@ public class UIInventoryBar : MonoBehaviour
                             inventorySlot[i].textMeshProUGUI.text = inventoryList[i].itemQuantity.ToString();
                             inventorySlot[i].itemDetails = itemDetails;
                             inventorySlot[i].itemQuantity = inventoryList[i].itemQuantity;
-
+                            SetHighlightOnInventorySlot(i);
                         }
                     }
                     else
@@ -96,5 +97,38 @@ public class UIInventoryBar : MonoBehaviour
             IsInventoryBarPositionBottom = false;
         }
 
+    }
+    //清除物品槽位选中状态
+    public void ClearHighlightOnInventorySlots()
+    {
+        if (inventorySlot.Length > 0)
+        {
+            for (int i = 0; i < inventorySlot.Length; i++)
+            {
+                inventorySlot[i].isSelected = false;
+                inventorySlot[i].inventorySlotHighlight.color = new Color(0f, 0f, 0f, 0f);
+                InventoryManager.Instance.ClearSelectedInventoryItem(InventoryLocation.player);
+            }
+        }
+    }
+    //设置物品槽位选中状态
+    public void SetHighlightOnInventorySlots()
+    {
+        if (inventorySlot.Length > 0)
+        {
+            for (int i = 0; i < inventorySlot.Length; i++)
+            {
+                SetHighlightOnInventorySlot(i);
+            }
+        }
+    }
+    //设置物品槽位选中状态
+    private void SetHighlightOnInventorySlot(int slotNumber)
+    {
+        if (inventorySlot[slotNumber].isSelected && inventorySlot[slotNumber].itemDetails != null)
+        {
+            inventorySlot[slotNumber].inventorySlotHighlight.color = new Color(1f, 1f, 1f, 0.5f);
+            InventoryManager.Instance.SetSelectedInventoryItem(InventoryLocation.player, inventorySlot[slotNumber].itemDetails.itemCode);
+        }
     }
 }

@@ -13,11 +13,19 @@ public class ObscuringItemFader : MonoBehaviour
 
     public void FadeOut()
     {
+        if (!gameObject.activeInHierarchy)
+        {
+            return;
+        }
         StartCoroutine(FadeOutRoutine());
     }
 
     public void FadeIn()
     {
+        if (!gameObject.activeInHierarchy)
+        {
+            return;
+        }
         StartCoroutine(FadeInRoutine());
     }
     private IEnumerator FadeOutRoutine()
@@ -27,7 +35,7 @@ public class ObscuringItemFader : MonoBehaviour
 
         while (currentAlpha - Settings.targetAlpha > 0.01f)
         {
-            currentAlpha -= distance / Settings.fadeOutSeconds*Time.deltaTime;
+            currentAlpha -= distance / Settings.fadeOutSeconds * Time.deltaTime;
             spriteRenderer.color = new Color(1f, 1f, 1f, currentAlpha);
             yield return null;
         }
@@ -38,7 +46,7 @@ public class ObscuringItemFader : MonoBehaviour
     private IEnumerator FadeInRoutine()
     {
         float currentAlpha = spriteRenderer.color.a;
-        float distance = 1f - currentAlpha ;
+        float distance = 1f - currentAlpha;
 
         while (1f - currentAlpha > 0.01f)
         {

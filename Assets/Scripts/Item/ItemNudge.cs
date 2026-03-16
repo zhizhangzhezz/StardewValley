@@ -14,6 +14,10 @@ public class ItemNudge : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (!gameObject.activeInHierarchy)
+        {
+            return;
+        }
         if (isAnimating == false)
         {
             //基于玩家和物体的位置决定旋转方向
@@ -30,6 +34,10 @@ public class ItemNudge : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
+        if (!gameObject.activeInHierarchy)
+        {
+            return;
+        }
         if (isAnimating == false)
         {
             //基于玩家和物体的位置决定旋转方向
@@ -47,12 +55,12 @@ public class ItemNudge : MonoBehaviour
     private IEnumerator RotateAntiClock()
     {
         isAnimating = true;
-        for(int i = 0; i < 4; ++i)
+        for (int i = 0; i < 4; ++i)
         {
             gameObject.transform.GetChild(0).Rotate(0f, 0f, 2f);
             yield return pause;
         }
-        for(int i = 0; i < 5; ++i)
+        for (int i = 0; i < 5; ++i)
         {
             gameObject.transform.GetChild(0).Rotate(0f, 0f, -2f);
             yield return pause;

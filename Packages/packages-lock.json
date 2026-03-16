@@ -92,7 +92,7 @@
       "url": "https://packages.unity.cn"
     },
     "com.unity.cinemachine": {
-      "version": "2.10.3",
+      "version": "2.10.6",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -134,11 +134,11 @@
       "url": "https://packages.unity.cn"
     },
     "com.unity.ide.visualstudio": {
-      "version": "2.0.22",
+      "version": "2.0.27",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.test-framework": "1.1.9"
+        "com.unity.test-framework": "1.1.33"
       },
       "url": "https://packages.unity.cn"
     },

@@ -5,6 +5,8 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
 {
     private Dictionary<int, ItemDetails> itemDetailsDictionary;//物品详情字典
 
+    private int[] selectedInventoryItem;//选中的物品
+
     public List<InventoryItem>[] inventoryLists;//玩家库存列表
 
     [HideInInspector] public int[] inventoryListCapacityIntArray;
@@ -16,6 +18,11 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
         base.Awake();
         CreateItemDetailsDictionary();
         CreateInventoryLists();
+        selectedInventoryItem = new int[(int)InventoryLocation.count];//初始化选中的物品数组，-1表示没有选中物品
+        for (int i = 0; i < (int)InventoryLocation.count; i++)
+        {
+            selectedInventoryItem[i] = -1;
+        }
     }
 
     private void CreateItemDetailsDictionary()
@@ -190,5 +197,17 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
         {
             Debug.Log("Item Description:" + InventoryManager.Instance.GetItemDetails(item.itemCode).itemDescription + " Quantity:" + item.itemQuantity);
         }
+    }
+
+    //设置选中的物品
+    public void SetSelectedInventoryItem(InventoryLocation inventoryLocation, int itemCode)
+    {
+        selectedInventoryItem[(int)inventoryLocation] = itemCode;
+    }
+
+    //清除选中的物品
+    public void ClearSelectedInventoryItem(InventoryLocation inventoryLocation)
+    {
+        selectedInventoryItem[(int)inventoryLocation] = -1;
     }
 }

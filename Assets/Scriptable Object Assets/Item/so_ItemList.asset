@@ -67,7 +67,7 @@ MonoBehaviour:
     canBeCarried: 0
   - itemCode: 10004
     itemType: 3
-    itemDescription: A Basic He
+    itemDescription: A Basic Hoe
     itemSprite: {fileID: 21300052, guid: 853ac38383c680342ac7e688bf29b197, type: 3}
     itemLongDescription: A strong, sturdy basic hoe - great for breaking up the soill
       ready for planting

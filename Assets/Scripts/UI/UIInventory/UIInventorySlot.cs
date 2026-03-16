@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 using TMPro;
 using UnityEngine.UI;
 
-public class UIInventorySlot : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
+public class UIInventorySlot : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     private Camera mainCamera;
     private Canvas parentCanvas;
@@ -19,6 +19,7 @@ public class UIInventorySlot : MonoBehaviour, IDragHandler, IBeginDragHandler, I
     [SerializeField] private GameObject itemPrefab = null;
     [SerializeField] private UIInventoryBar inventoryBar = null;
     [SerializeField] private GameObject inventoryTextBoxPrefab = null;
+    [HideInInspector] public bool isSelected = false;
     [HideInInspector] public ItemDetails itemDetails;
     [HideInInspector] public int itemQuantity;
     [SerializeField] private int slotNumber = 0;
@@ -36,7 +37,7 @@ public class UIInventorySlot : MonoBehaviour, IDragHandler, IBeginDragHandler, I
 
     private void DropSelectedItemAtMousePosition()
     {
-        if (itemDetails != null)
+        if (itemDetails != null && isSelected)
         {
             Vector3 worldPosition = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -mainCamera.transform.position.z));
 
@@ -44,7 +45,11 @@ public class UIInventorySlot : MonoBehaviour, IDragHandler, IBeginDragHandler, I
             Item item = itemGameObject.GetComponent<Item>();
             item.ItemCode = itemDetails.itemCode;
             InventoryManager.Instance.RemoveItem(InventoryLocation.player, item.ItemCode);
-
+            //如果拖动放置后物品栏中没有该物品了，清除选中状态
+            if (InventoryManager.Instance.FindItemInInventory(InventoryLocation.player, item.ItemCode) == -1)
+            {
+                ClearSelectedItem();
+            }
         }
     }
     public void OnBeginDrag(PointerEventData eventData)
@@ -57,6 +62,8 @@ public class UIInventorySlot : MonoBehaviour, IDragHandler, IBeginDragHandler, I
 
             Image draggedItemImage = draggedItem.GetComponentInChildren<Image>();
             draggedItemImage.sprite = inventorySlotImage.sprite;
+
+            SetSelectedItem();
         }
     }
     public void OnDrag(PointerEventData eventData)
@@ -80,6 +87,7 @@ public class UIInventorySlot : MonoBehaviour, IDragHandler, IBeginDragHandler, I
                 InventoryManager.Instance.SwapInventoryItems(InventoryLocation.player, slotNumber, toSlotNumber);
                 DestoryTextBox();
 
+                ClearSelectedItem();
             }
             else
             {
@@ -108,18 +116,52 @@ public class UIInventorySlot : MonoBehaviour, IDragHandler, IBeginDragHandler, I
             if (inventoryBar.IsInventoryBarPositionBottom)
             {
                 inventoryBar.inventoryTextBoxGameObject.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 0.1f);
-                inventoryBar.inventoryTextBoxGameObject.transform.position = new Vector3(transform.position.x, transform.position.y + 50f, transform.position.z);
+                inventoryBar.inventoryTextBoxGameObject.transform.position = new Vector3(transform.position.x, transform.position.y + 90f, transform.position.z);
             }
             else
             {
                 inventoryBar.inventoryTextBoxGameObject.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 0.9f);
-                inventoryBar.inventoryTextBoxGameObject.transform.position = new Vector3(transform.position.x, transform.position.y - 50f, transform.position.z);
+                inventoryBar.inventoryTextBoxGameObject.transform.position = new Vector3(transform.position.x, transform.position.y - 90f, transform.position.z);
             }
         }
     }
     public void OnPointerExit(PointerEventData eventData)
     {
         DestoryTextBox();
+    }
+
+    //点击物品槽位
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Left)//左键点击物品栏
+        {
+            if (isSelected)
+            {//如果当前物品槽位已选中
+                ClearSelectedItem();
+            }
+            else
+            {
+                if (itemQuantity > 0)
+                {//如果物品槽位有物品
+                    SetSelectedItem();
+                }
+            }
+        }
+    }
+    //设置选中物品
+    private void SetSelectedItem()
+    {
+        inventoryBar.ClearHighlightOnInventorySlots();
+        isSelected = true;
+        inventoryBar.SetHighlightOnInventorySlots();
+        InventoryManager.Instance.SetSelectedInventoryItem(InventoryLocation.player, itemDetails.itemCode);
+    }
+    //清除选中物品
+    private void ClearSelectedItem()
+    {
+        inventoryBar.ClearHighlightOnInventorySlots();
+        isSelected = false;
+        InventoryManager.Instance.ClearSelectedInventoryItem(InventoryLocation.player);
     }
     private void DestoryTextBox()
     {
