@@ -56,6 +56,9 @@ public static class Settings
     public const string WateringTool = "Watering Can";
     public const string CollectingTool = "Basket";
 
+    //游戏时间参数
+    public const float secondsPerGameScond = 0.012f;
+
     // Static constructor
     static Settings()
     {

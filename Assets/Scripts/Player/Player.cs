@@ -48,6 +48,8 @@ public class Player : SingletonMonobehaviour<Player>
             PlayerMovementInput();
             ResetAnimationTriggers();
             PlayerWalkInput();
+
+            PlayerTestInput();
         }
 
 
@@ -119,6 +121,18 @@ public class Player : SingletonMonobehaviour<Player>
             parameters.isIdle = true;
             parameters.isWalking = false;
             parameters.isRunning = false;
+        }
+    }
+
+    private void PlayerTestInput()
+    {
+        if (Input.GetKey(KeyCode.T))
+        {
+            TimeManager.Instance.TestAdvanceGameMinute();
+        }
+        if (Input.GetKey(KeyCode.G))
+        {
+            TimeManager.Instance.TestAdvanceGameDay();
         }
     }
 
