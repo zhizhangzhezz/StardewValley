@@ -29,10 +29,24 @@ public class UIInventorySlot : MonoBehaviour, IDragHandler, IBeginDragHandler, I
         parentCanvas = GetComponentInParent<Canvas>();
     }
 
+    private void OnEnable()
+    {
+        EventHandler.AfterSceneLoadEvent += SceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        EventHandler.AfterSceneLoadEvent -= SceneLoaded;
+    }
+
+    private void SceneLoaded()
+    {
+        parentItem = GameObject.FindGameObjectWithTag(Tags.ItemsParentTransform).transform;
+    }
+
     private void Start()
     {
         mainCamera = Camera.main;
-        parentItem = GameObject.FindGameObjectWithTag(Tags.ItemsParentTransform).transform;
     }
 
     private void DropSelectedItemAtMousePosition()
