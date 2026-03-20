@@ -55,14 +55,21 @@ public class UIInventorySlot : MonoBehaviour, IDragHandler, IBeginDragHandler, I
         {
             Vector3 worldPosition = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -mainCamera.transform.position.z));
 
-            GameObject itemGameObject = Instantiate(itemPrefab, worldPosition, Quaternion.identity, parentItem);
-            Item item = itemGameObject.GetComponent<Item>();
-            item.ItemCode = itemDetails.itemCode;
-            InventoryManager.Instance.RemoveItem(InventoryLocation.player, item.ItemCode);
-            //如果拖动放置后物品栏中没有该物品了，清除选中状态
-            if (InventoryManager.Instance.FindItemInInventory(InventoryLocation.player, item.ItemCode) == -1)
+            //先判断当前网格能否放东西
+            Vector3Int gridPosition = GridPropertiesManager.Instance.grid.WorldToCell(worldPosition);
+            GridPropertyDetails gridPropertyDetails = GridPropertiesManager.Instance.GetGridPropertyDetails(gridPosition.x, gridPosition.y);
+
+            if (gridPropertyDetails != null && gridPropertyDetails.canDropItem)
             {
-                ClearSelectedItem();
+                GameObject itemGameObject = Instantiate(itemPrefab, worldPosition, Quaternion.identity, parentItem);
+                Item item = itemGameObject.GetComponent<Item>();
+                item.ItemCode = itemDetails.itemCode;
+                InventoryManager.Instance.RemoveItem(InventoryLocation.player, item.ItemCode);
+                //如果拖动放置后物品栏中没有该物品了，清除选中状态
+                if (InventoryManager.Instance.FindItemInInventory(InventoryLocation.player, item.ItemCode) == -1)
+                {
+                    ClearSelectedItem();
+                }
             }
         }
     }

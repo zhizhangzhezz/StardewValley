@@ -2,7 +2,8 @@ using System.Collections.Generic;
 
 public class SceneSave
 {
-    //key:itemCode
-    //value:itemName
-    public Dictionary<string, List<SceneItem>> listSceneItemDictionary;
+    //场景中的物品列表
+    public List<SceneItem> listSceneItem;
+    public Dictionary<string, GridPropertyDetails> gridPropertyDetailsDictionary;
+
 }
