@@ -85,6 +85,25 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
         return -1;
     }
 
+    private int GetSelectedInventoryItem(InventoryLocation inventoryLocation)
+    {
+        return selectedInventoryItem[(int)inventoryLocation];
+    }
+
+    //返回物品详情类
+    public ItemDetails GetSelectedInventoryItemDetails(InventoryLocation inventoryLocation)
+    {
+        int itemCode = GetSelectedInventoryItem(inventoryLocation);
+        if (itemCode != -1)
+        {
+            return GetItemDetails(itemCode);
+        }
+        else
+        {
+            return null;
+        }
+    }
+
     //在指定位置添加物品(当前未有该物品)
     private void AddItemAtPosition(List<InventoryItem> inventoryList, int itemCode)
     {

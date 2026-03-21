@@ -1,4 +1,6 @@
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 using UnityEngine.Tilemaps;
 [ExecuteAlways]
@@ -30,7 +32,9 @@ public class TilemapGridProperties : MonoBehaviour
 
             if (gridProperties != null)
             {
+#if UNITY_EDITOR
                 EditorUtility.SetDirty(gridProperties);//标记为脏，触发自动保存
+#endif
             }
         }
     }

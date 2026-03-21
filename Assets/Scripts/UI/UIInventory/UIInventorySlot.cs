@@ -11,6 +11,9 @@ public class UIInventorySlot : MonoBehaviour, IDragHandler, IBeginDragHandler, I
     private Canvas parentCanvas;
     private Transform parentItem;
     private GameObject draggedItem;
+
+    private GridCursor gridCursor;
+
     public Image inventorySlotHighlight;
     public Image inventorySlotImage;
     public TextMeshProUGUI textMeshProUGUI;
@@ -47,21 +50,27 @@ public class UIInventorySlot : MonoBehaviour, IDragHandler, IBeginDragHandler, I
     private void Start()
     {
         mainCamera = Camera.main;
+        gridCursor = GameObject.FindObjectOfType<GridCursor>();
+    }
+
+    private void ClearCursors()
+    {
+        gridCursor.DisableCursor();
+        gridCursor.SelectedItemType = ItemType.none;
     }
 
     private void DropSelectedItemAtMousePosition()
     {
         if (itemDetails != null && isSelected)
         {
-            Vector3 worldPosition = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -mainCamera.transform.position.z));
 
-            //先判断当前网格能否放东西
-            Vector3Int gridPosition = GridPropertiesManager.Instance.grid.WorldToCell(worldPosition);
-            GridPropertyDetails gridPropertyDetails = GridPropertiesManager.Instance.GetGridPropertyDetails(gridPosition.x, gridPosition.y);
 
-            if (gridPropertyDetails != null && gridPropertyDetails.canDropItem)
+            //先判断当前网格能否放东西(通过光标有效性判断)
+            if (gridCursor.CursorPositionIsValid)
             {
-                GameObject itemGameObject = Instantiate(itemPrefab, worldPosition, Quaternion.identity, parentItem);
+                Vector3 worldPosition = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -mainCamera.transform.position.z));
+                Vector3 itemPosition = new Vector3(worldPosition.x, worldPosition.y - Settings.gridCellSize / 2f, worldPosition.z);
+                GameObject itemGameObject = Instantiate(itemPrefab, itemPosition, Quaternion.identity, parentItem);
                 Item item = itemGameObject.GetComponent<Item>();
                 item.ItemCode = itemDetails.itemCode;
                 InventoryManager.Instance.RemoveItem(InventoryLocation.player, item.ItemCode);
@@ -175,6 +184,18 @@ public class UIInventorySlot : MonoBehaviour, IDragHandler, IBeginDragHandler, I
         inventoryBar.ClearHighlightOnInventorySlots();
         isSelected = true;
         inventoryBar.SetHighlightOnInventorySlots();
+
+        gridCursor.ItemUserGridRadius = itemDetails.itemUseGridRadius;
+        if (itemDetails.itemUseGridRadius > 0)
+        {
+            gridCursor.EnableCursor();
+        }
+        else
+        {
+            gridCursor.DisableCursor();
+        }
+        gridCursor.SelectedItemType = itemDetails.itemType;
+
         InventoryManager.Instance.SetSelectedInventoryItem(InventoryLocation.player, itemDetails.itemCode);
         //如果物品可以被携带,则显示在玩家手上
         if (itemDetails.canBeCarried)
@@ -189,6 +210,7 @@ public class UIInventorySlot : MonoBehaviour, IDragHandler, IBeginDragHandler, I
     //清除选中物品
     private void ClearSelectedItem()
     {
+        ClearCursors();
         inventoryBar.ClearHighlightOnInventorySlots();
         isSelected = false;
         InventoryManager.Instance.ClearSelectedInventoryItem(InventoryLocation.player);
