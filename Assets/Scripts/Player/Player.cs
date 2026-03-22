@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : SingletonMonobehaviour<Player>
 {
+    private WaitForSeconds afterUseToolAnimationPause;
     private AnimationOverrides animationOverrides;
+    private GridCursor gridCursor;
     private MovementEventParams parameters = new MovementEventParams();
     private Rigidbody2D rb;
     private Direction playerDirection;
@@ -18,6 +21,9 @@ public class Player : SingletonMonobehaviour<Player>
     private CharacterAttribute toolCharacterAttribute;
 
     private Camera mainCamera;
+
+    private bool playerToolUseDisabled = false;
+    private WaitForSeconds useToolAnimationPause;
 
     private const float PIXELS_PER_UNIT = 16f;
     private const float PIXEL_STEP = 1f / PIXELS_PER_UNIT;
@@ -39,6 +45,13 @@ public class Player : SingletonMonobehaviour<Player>
         mainCamera = Camera.main;
     }
 
+    private void Start()
+    {
+        gridCursor = FindObjectOfType<GridCursor>();
+        useToolAnimationPause = new WaitForSeconds(Settings.useToolAnimationPause);
+        afterUseToolAnimationPause = new WaitForSeconds(Settings.afterUseToolAnimationPause);
+    }
+
     private void Update()
     {
         //if (PlayerInputIsDisabled) return;
@@ -50,6 +63,7 @@ public class Player : SingletonMonobehaviour<Player>
             PlayerWalkInput();
 
             PlayerTestInput();
+            PlayerClickInput();
         }
 
 
@@ -79,6 +93,170 @@ public class Player : SingletonMonobehaviour<Player>
     {
 
     }
+
+    private void PlayerClickInput()
+    {
+        if (!playerToolUseDisabled)//播放使用工具动画时不能进行其他操作
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                // 处理左键点击
+                if (gridCursor.CursorIsEnabled)
+                {
+                    //获取光标和玩家的网格位置
+                    Vector3Int cursorGridPosition = gridCursor.GetGridPositionForCursor();
+                    Vector3Int playerGridPosition = gridCursor.GetGridPositionForPlayer();
+                    ProcessPlayerClickInput(cursorGridPosition, playerGridPosition);
+                }
+            }
+        }
+    }
+
+
+
+    private void ProcessPlayerClickInput(Vector3Int cursorGridPosition, Vector3Int playerGridPosition)
+    {
+        ResetMovement();
+        //获取光标相对玩家位置，确定动画播放的方向
+        Vector3Int playerDirection = GetPlayerClickDirection(cursorGridPosition, playerGridPosition);
+        //获取网格属性
+        GridPropertyDetails gridPropertyDetails = GridPropertiesManager.Instance.GetGridPropertyDetails(cursorGridPosition.x, cursorGridPosition.y);
+
+        ItemDetails selectedItemDetails = InventoryManager.Instance.GetSelectedInventoryItemDetails(InventoryLocation.player);
+
+        if (selectedItemDetails != null)
+        {
+            switch (selectedItemDetails.itemType)
+            {
+                case ItemType.Seed:
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        ProcessPlayerClickInputSeed(selectedItemDetails);
+                    }
+                    break;
+
+                case ItemType.Commodity:
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        ProcessPlayerClickInputCommodity(selectedItemDetails);
+                    }
+                    break;
+
+                case ItemType.HoeingTool:
+                    ProcessPlayerClickInputTool(gridPropertyDetails, selectedItemDetails, playerDirection);
+                    break;
+
+                case ItemType.none:
+                    break;
+
+                case ItemType.count:
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
+
+    private Vector3Int GetPlayerClickDirection(Vector3Int cursorGridPosition, Vector3Int playerGridPosition)
+    {
+        if (cursorGridPosition.x > playerGridPosition.x)
+        {
+            return Vector3Int.right;
+        }
+        else if (cursorGridPosition.x < playerGridPosition.x)
+        {
+            return Vector3Int.left;
+        }
+        else if (cursorGridPosition.y > playerGridPosition.y)
+        {
+            return Vector3Int.up;
+        }
+        else
+        {
+            return Vector3Int.down;
+        }
+    }
+    private void ProcessPlayerClickInputSeed(ItemDetails itemDetails)
+    {
+        if (itemDetails.canBeDropped && gridCursor.CursorPositionIsValid)
+        {
+            EventHandler.CallDropSelectedItemEvent();
+        }
+    }
+
+    private void ProcessPlayerClickInputCommodity(ItemDetails itemDetails)
+    {
+        if (itemDetails.canBeDropped && gridCursor.CursorPositionIsValid)
+        {
+            EventHandler.CallDropSelectedItemEvent();
+        }
+    }
+    private void ProcessPlayerClickInputTool(GridPropertyDetails gridPropertyDetails, ItemDetails itemDetails, Vector3Int playerDirection)
+    {
+        switch (itemDetails.itemType)
+        {
+            case ItemType.HoeingTool:
+                if (gridCursor.CursorPositionIsValid)
+                {
+                    HoeGroundAtCursor(gridPropertyDetails, playerDirection);
+                }
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    private void HoeGroundAtCursor(GridPropertyDetails gridPropertyDetails, Vector3Int playerDirection)
+    {
+        //播放动画
+        StartCoroutine(HoeGroundAtCursorRoutine(playerDirection, gridPropertyDetails));
+    }
+
+    private IEnumerator HoeGroundAtCursorRoutine(Vector3Int playerDirection, GridPropertyDetails gridPropertyDetails)
+    {
+        playerToolUseDisabled = true;
+        PlayerInputIsDisabled = true;
+        //覆盖动画
+        toolCharacterAttribute.partVariantType = PartVariantType.hoe;
+        characterAttributesCustomisationList.Clear();
+        characterAttributesCustomisationList.Add(toolCharacterAttribute);
+        animationOverrides.ApplyCharacterCustomisationParameters(characterAttributesCustomisationList);
+
+        if (playerDirection == Vector3Int.up)
+        {
+            parameters.isUsingToolUp = true;
+        }
+        else if (playerDirection == Vector3Int.down)
+        {
+            parameters.isUsingToolDown = true;
+        }
+        else if (playerDirection == Vector3Int.left)
+        {
+            parameters.isUsingToolLeft = true;
+        }
+        else if (playerDirection == Vector3Int.right)
+        {
+            parameters.isUsingToolRight = true;
+        }
+
+        yield return useToolAnimationPause;
+        //网格属性设为dug
+        if (gridPropertyDetails.daysSinceDug == -1)
+        {
+            gridPropertyDetails.daysSinceDug = 0;
+        }
+        GridPropertiesManager.Instance.SetGridPropertyDetails(gridPropertyDetails.gridX, gridPropertyDetails.gridY, gridPropertyDetails);
+
+        GridPropertiesManager.Instance.DisplayDugGround(gridPropertyDetails);
+
+        yield return afterUseToolAnimationPause;
+
+        playerToolUseDisabled = false;
+        PlayerInputIsDisabled = false;
+    }
+
     private void PlayerWalkInput()
     {
         if (Input.GetKey(KeyCode.LeftShift))

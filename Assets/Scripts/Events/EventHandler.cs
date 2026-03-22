@@ -120,4 +120,15 @@ public static class EventHandler
             AfterSceneLoadFadeInEvent();
         }
     }
+
+    //点击丢弃物品
+    public static event Action DropSelectedItemEvent;
+
+    public static void CallDropSelectedItemEvent()
+    {
+        if (DropSelectedItemEvent != null)
+        {
+            DropSelectedItemEvent();
+        }
+    }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -58,7 +59,7 @@ public class GridCursor : MonoBehaviour
 
             SetCursorValidity(gridPosition, playerGridPosition);
 
-            cursorRectTransform.position = GetRectTransformPositionForCursor(gridPosition);
+            cursorRectTransform.position = GetRectTransformPositionForCursor(gridPosition);//光标跟随鼠标显示
 
             return gridPosition;
         }
@@ -73,6 +74,12 @@ public class GridCursor : MonoBehaviour
     {
         Vector3 worldPosition = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -mainCamera.transform.position.z));
         return grid.WorldToCell(worldPosition);
+    }
+
+    //返回光标在世界中的位置
+    public Vector3 GetWorldPositionForCursor()
+    {
+        return grid.CellToWorld(GetGridPositionForCursor());
     }
 
     //返回玩家在网格中的位置
@@ -125,6 +132,15 @@ public class GridCursor : MonoBehaviour
                     }
                     break;
 
+                case ItemType.HoeingTool:
+                    if (!IsCursorValidForTool(gridPropertyDetails, itemDetails))
+                    {
+                        //光标设为无效
+                        SetCursorToInvalid();
+                        return;
+                    }
+                    break;
+
                 case ItemType.none:
                     break;
 
@@ -151,6 +167,49 @@ public class GridCursor : MonoBehaviour
     private bool IsCursorValidForCommodity(GridPropertyDetails gridPropertyDetails)
     {
         return gridPropertyDetails.canDropItem;
+    }
+    private bool IsCursorValidForTool(GridPropertyDetails gridPropertyDetails, ItemDetails itemDetails)
+    {
+        switch (itemDetails.itemType)
+        {
+            case ItemType.HoeingTool:
+                if (gridPropertyDetails.isDiggable && gridPropertyDetails.daysSinceDug == -1)
+                {
+                    //获取光标位置
+                    Vector3 cursorWorldPosition = new Vector3(GetWorldPositionForCursor().x + 0.5f, GetWorldPositionForCursor().y + 0.5f, 0f);
+
+                    //获取光标位置的场景物体
+                    List<Item> itemList = new List<Item>();
+
+                    HelperMethods.GetComponentsAtBoxLocation<Item>(out itemList, cursorWorldPosition, Settings.cursorSize, 0f);
+
+                    //若有可收割的物品，则不能耕地
+                    bool foundReapable = false;
+                    foreach (Item item in itemList)
+                    {
+                        if (InventoryManager.Instance.GetItemDetails(item.ItemCode).itemType == ItemType.Reapable_scenary)
+                        {
+                            foundReapable = true;
+                            break;
+                        }
+                    }
+                    if (foundReapable)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+
+                }
+                else
+                {
+                    return false;
+                }
+            default:
+                return false;
+        }
     }
 
     private void SetCursorToValid()

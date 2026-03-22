@@ -2,17 +2,22 @@
 
 public static class Settings
 {
-    //Obscuring item fading - obscuringItemFader
+    //场景物品淡入淡出
     public const float fadeInSeconds = 0.25f;
     public const float fadeOutSeconds = 0.35f;
     public const float targetAlpha = 0.45f;
 
     //Tilemap
     public const float gridCellSize = 1f;
+    public static Vector2 cursorSize = Vector2.one;
 
     //player movement
     public const float runningSpeed = 8f;
     public const float walkingSpeed = 2.666f;
+
+    //玩家使用工具时暂停的时间
+    public static float useToolAnimationPause = 0.25f;
+    public static float afterUseToolAnimationPause = 0.2f;
 
     //Inventory
     public static int playerInitialInventoryCapacity = 24;
