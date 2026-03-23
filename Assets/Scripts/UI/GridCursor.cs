@@ -141,6 +141,15 @@ public class GridCursor : MonoBehaviour
                     }
                     break;
 
+                case ItemType.WateringTool:
+                    if (!IsCursorValidForTool(gridPropertyDetails, itemDetails))
+                    {
+                        //光标设为无效
+                        SetCursorToInvalid();
+                        return;
+                    }
+                    break;
+
                 case ItemType.none:
                     break;
 
@@ -207,6 +216,17 @@ public class GridCursor : MonoBehaviour
                 {
                     return false;
                 }
+
+            case ItemType.WateringTool:
+                if (gridPropertyDetails.daysSinceDug > -1 && gridPropertyDetails.daysSinceWatered == -1)//耕过且未浇过水的地块才能浇水
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
             default:
                 return false;
         }

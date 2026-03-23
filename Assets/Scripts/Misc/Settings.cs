@@ -17,13 +17,15 @@ public static class Settings
 
     //玩家使用工具时暂停的时间
     public static float useToolAnimationPause = 0.25f;
+    public static float liftToolAnimationPause = 0.4f;
     public static float afterUseToolAnimationPause = 0.2f;
+    public static float afterLiftToolAnimationPause = 0.3f;
 
-    //Inventory
+    //库存系统
     public static int playerInitialInventoryCapacity = 24;
     public static int playerMaximumInventoryCapacity = 48;
 
-    // Player Animation Parameters
+    //玩家动画参数
     public static int xInput;
     public static int yInput;
     public static int isWalking;
