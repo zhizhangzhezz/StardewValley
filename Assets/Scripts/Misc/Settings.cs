@@ -11,7 +11,10 @@ public static class Settings
     public const float gridCellSize = 1f;
     public static Vector2 cursorSize = Vector2.one;
 
-    //player movement
+    //玩家从底部到中心的偏移
+    public static float playerCenterOffset = 0.875f;
+
+    //玩家移动速度
     public const float runningSpeed = 8f;
     public const float walkingSpeed = 2.666f;
 
@@ -52,7 +55,7 @@ public static class Settings
     public static int isPickingUp;
     public static int isPickingDown;
 
-    // Shared animation parameters
+    //动画参数
     public static int idleUp;
     public static int idleDown;
     public static int idleLeft;
@@ -65,6 +68,10 @@ public static class Settings
     public const string ReapingTool = "Scythe";
     public const string WateringTool = "Watering Can";
     public const string CollectingTool = "Basket";
+
+    //镰刀工具
+    public const int maxCollidersToTestPerSwing = 15;
+    public const int maxTargetToDestroyPerSwing = 2;//每次挥动最多摧毁两个
 
     //游戏时间参数
     public const float secondsPerGameScond = 0.012f;

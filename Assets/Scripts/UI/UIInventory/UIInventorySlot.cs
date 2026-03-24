@@ -13,6 +13,7 @@ public class UIInventorySlot : MonoBehaviour, IDragHandler, IBeginDragHandler, I
     private GameObject draggedItem;
 
     private GridCursor gridCursor;
+    private Cursor cursor;
 
     public Image inventorySlotHighlight;
     public Image inventorySlotImage;
@@ -53,12 +54,15 @@ public class UIInventorySlot : MonoBehaviour, IDragHandler, IBeginDragHandler, I
     {
         mainCamera = Camera.main;
         gridCursor = GameObject.FindObjectOfType<GridCursor>();
+        cursor = GameObject.FindObjectOfType<Cursor>();
     }
 
     private void ClearCursors()
     {
         gridCursor.DisableCursor();
+        cursor.DisableCursor();
         gridCursor.SelectedItemType = ItemType.none;
+        cursor.SelectedItemType = ItemType.none;
     }
 
     private void DropSelectedItemAtMousePosition()
@@ -188,6 +192,8 @@ public class UIInventorySlot : MonoBehaviour, IDragHandler, IBeginDragHandler, I
         inventoryBar.SetHighlightOnInventorySlots();
 
         gridCursor.ItemUserGridRadius = itemDetails.itemUseGridRadius;
+        cursor.ItemUseRadius = itemDetails.itemUseRadius;
+
         if (itemDetails.itemUseGridRadius > 0)
         {
             gridCursor.EnableCursor();
@@ -196,7 +202,18 @@ public class UIInventorySlot : MonoBehaviour, IDragHandler, IBeginDragHandler, I
         {
             gridCursor.DisableCursor();
         }
+
+        if (itemDetails.itemUseRadius > 0)
+        {
+            cursor.EnableCursor();
+        }
+        else
+        {
+            cursor.DisableCursor();
+        }
+
         gridCursor.SelectedItemType = itemDetails.itemType;
+        cursor.SelectedItemType = itemDetails.itemType;
 
         InventoryManager.Instance.SetSelectedInventoryItem(InventoryLocation.player, itemDetails.itemCode);
         //如果物品可以被携带,则显示在玩家手上

@@ -133,14 +133,10 @@ public class GridCursor : MonoBehaviour
                     break;
 
                 case ItemType.HoeingTool:
-                    if (!IsCursorValidForTool(gridPropertyDetails, itemDetails))
-                    {
-                        //光标设为无效
-                        SetCursorToInvalid();
-                        return;
-                    }
-                    break;
-
+                case ItemType.BreakingTool:
+                case ItemType.ChoppingTool:
+                case ItemType.ReapingTool:
+                case ItemType.CollectingTool:
                 case ItemType.WateringTool:
                     if (!IsCursorValidForTool(gridPropertyDetails, itemDetails))
                     {
