@@ -96,8 +96,9 @@ public class Player : SingletonMonobehaviour<Player>
         if (!PlayerInputIsDisabled)
         {
             PlayerMovement();
-            EventHandler.CallMovementEvent(parameters);
+
         }
+        EventHandler.CallMovementEvent(parameters);
     }
 
 
@@ -519,10 +520,7 @@ public class Player : SingletonMonobehaviour<Player>
         {
             TimeManager.Instance.TestAdvanceGameDay();
         }
-        if (Input.GetKey(KeyCode.L))
-        {
-            SceneControllerManager.Instance.FadeAndLoadScene(SceneName.Scene1_Farm.ToString(), transform.position);
-        }
+
     }
 
     private void ResetAnimationTriggers()
