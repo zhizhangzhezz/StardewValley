@@ -69,7 +69,8 @@ public enum SceneName
     Scene3_Cabin
 }
 
-public enum GridBoolProperty{
+public enum GridBoolProperty
+{
     diggable,
     canDropItem,
     canPlaceFurniture,
@@ -123,4 +124,14 @@ public enum ItemType
     none,
     count
 
+}
+
+public enum HarvestActionEffect
+{
+    deciduousLeavesFalling,
+    pinConesFalling,
+    choppingTreeTrunk,
+    breakingStone,
+    reaping,
+    none
 }

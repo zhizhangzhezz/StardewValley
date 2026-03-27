@@ -131,4 +131,14 @@ public static class EventHandler
             DropSelectedItemEvent();
         }
     }
+
+    public static event Action<Vector3, HarvestActionEffect> HarvestActionEffectEvent;
+
+    public static void CallHarvestActionEffectEvent(Vector3 position, HarvestActionEffect effect)
+    {
+        if (HarvestActionEffectEvent != null)
+        {
+            HarvestActionEffectEvent(position, effect);
+        }
+    }
 }

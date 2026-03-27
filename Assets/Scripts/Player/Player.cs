@@ -453,6 +453,9 @@ public class Player : SingletonMonobehaviour<Player>
                 {
                     //粒子效果范围
                     Vector3 effectPosition = new Vector3(itemArray[i].transform.position.x, itemArray[i].transform.position.y + Settings.gridCellSize / 2f, itemArray[i].transform.position.z);
+                    //触发粒子效果
+                    EventHandler.CallHarvestActionEffectEvent(effectPosition, HarvestActionEffect.reaping);
+
                     Destroy(itemArray[i].gameObject);
                     reapableItemCount++;
 
