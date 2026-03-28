@@ -11,6 +11,7 @@ public class GridCursor : MonoBehaviour
     [SerializeField] private RectTransform cursorRectTransform = null;
     [SerializeField] private Sprite redCursorSprite = null;
     [SerializeField] private Sprite greenCursorSprite = null;
+    [SerializeField] private SO_CropDetailsList sO_CropDetailsList = null;
 
     private bool _cursorPositionIsValid = false;
     public bool CursorPositionIsValid { get => _cursorPositionIsValid; set => _cursorPositionIsValid = value; }
@@ -222,6 +223,32 @@ public class GridCursor : MonoBehaviour
                 {
                     return false;
                 }
+
+            case ItemType.CollectingTool:
+                //已有作物种植
+                if (gridPropertyDetails.seedItemCode != -1)
+                {
+                    CropDetails cropDetails = sO_CropDetailsList.GetCropDetails(gridPropertyDetails.seedItemCode);
+                    if (cropDetails != null)
+                    {
+                        if (gridPropertyDetails.growthDays >= cropDetails.totalGrowthDays)//已经成熟
+                        {
+                            if (cropDetails.CanUseToolToHarvestCrop(itemDetails.itemCode))
+                            {
+                                return true;
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                }
+                return false;
 
             default:
                 return false;

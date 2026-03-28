@@ -23,6 +23,8 @@ public static class Settings
     public static float liftToolAnimationPause = 0.4f;
     public static float afterUseToolAnimationPause = 0.2f;
     public static float afterLiftToolAnimationPause = 0.3f;
+    public static float pickAnimationPause = 0.8f;
+    public static float afterPickAnimationPause = 0.2f;
 
     //库存系统
     public static int playerInitialInventoryCapacity = 24;

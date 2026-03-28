@@ -141,4 +141,15 @@ public static class EventHandler
             HarvestActionEffectEvent(position, effect);
         }
     }
+
+    //种下种子时从物品栏中移除
+    public static event Action RemoveSelectedItemFromInventoryEvent;
+
+    public static void CallRemoveSelectedItemFromInventoryEvent()
+    {
+        if (RemoveSelectedItemFromInventoryEvent != null)
+        {
+            RemoveSelectedItemFromInventoryEvent();
+        }
+    }
 }

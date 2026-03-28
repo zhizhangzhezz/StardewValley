@@ -37,12 +37,14 @@ public class UIInventorySlot : MonoBehaviour, IDragHandler, IBeginDragHandler, I
     {
         EventHandler.AfterSceneLoadEvent += SceneLoaded;
         EventHandler.DropSelectedItemEvent += DropSelectedItemAtMousePosition;
+        EventHandler.RemoveSelectedItemFromInventoryEvent += RemoveSelectedItemFromInventory;
     }
 
     private void OnDisable()
     {
         EventHandler.AfterSceneLoadEvent -= SceneLoaded;
         EventHandler.DropSelectedItemEvent -= DropSelectedItemAtMousePosition;
+        EventHandler.RemoveSelectedItemFromInventoryEvent -= RemoveSelectedItemFromInventory;
     }
 
     private void SceneLoaded()
@@ -88,6 +90,28 @@ public class UIInventorySlot : MonoBehaviour, IDragHandler, IBeginDragHandler, I
             }
         }
     }
+
+    private void RemoveSelectedItemFromInventory()
+    {
+        if (itemDetails != null && isSelected && itemQuantity > 0)
+        {
+            // 先缓存 itemCode，避免在 InventoryManager.RemoveItem 导致 UI 或 itemDetails 被刷新为 null
+            int itemCode = itemDetails.itemCode;
+
+            if (InventoryManager.Instance == null)
+                return;
+
+            InventoryManager.Instance.RemoveItem(InventoryLocation.player, itemCode);
+
+            // 用完了则清除选中（再次使用缓存的 itemCode）
+            if (InventoryManager.Instance.FindItemInInventory(InventoryLocation.player, itemCode) == -1)
+            {
+                ClearSelectedItem();
+            }
+        }
+    }
+
+
     public void OnBeginDrag(PointerEventData eventData)
     {
         if (itemDetails != null)
@@ -232,9 +256,11 @@ public class UIInventorySlot : MonoBehaviour, IDragHandler, IBeginDragHandler, I
         ClearCursors();
         inventoryBar.ClearHighlightOnInventorySlots();
         isSelected = false;
-        InventoryManager.Instance.ClearSelectedInventoryItem(InventoryLocation.player);
+        if (InventoryManager.Instance != null)
+            InventoryManager.Instance.ClearSelectedInventoryItem(InventoryLocation.player);
 
-        Player.Instance.ClearCarriedItem();
+        if (Player.Instance != null)
+            Player.Instance.ClearCarriedItem();
     }
     private void DestoryTextBox()
     {

@@ -47,6 +47,19 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
         }
         inventoryListCapacityIntArray = new int[(int)InventoryLocation.count];
         inventoryListCapacityIntArray[(int)InventoryLocation.player] = Settings.playerInitialInventoryCapacity;
+
+        // 用空占位符初始化每个列表到其容量（如果 capacity 为 0 则不填充）
+        for (int i = 0; i < (int)InventoryLocation.count; i++)
+        {
+            int cap = inventoryListCapacityIntArray[i];
+            for (int j = 0; j < cap; j++)
+            {
+                InventoryItem empty = new InventoryItem();
+                empty.itemCode = -1; // -1 表示空槽位
+                empty.itemQuantity = 0;
+                inventoryLists[i].Add(empty);
+            }
+        }
     }
 
     public void AddItem(InventoryLocation inventoryLocation, Item item, GameObject gameObjectToDelete)
@@ -67,7 +80,50 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
         }
         else
         {
-            AddItemAtPosition(inventoryList, itemCode);
+            // 优先寻找第一个空槽位填充
+            int emptySlot = FindFirstEmptySlot(inventoryList);
+            if (emptySlot != -1)
+            {
+                InventoryItem inventoryItem = new InventoryItem();
+                inventoryItem.itemCode = itemCode;
+                inventoryItem.itemQuantity = 1;
+                inventoryList[emptySlot] = inventoryItem;
+            }
+            else
+            {
+                // 没有空槽则追加（兼容原实现或扩容）
+                AddItemAtPosition(inventoryList, itemCode);
+            }
+        }
+        EventHandler.CallInventoryUpdatedEvent(inventoryLocation, inventoryLists[(int)inventoryLocation]);
+    }
+
+    public void AddItem(InventoryLocation inventoryLocation, int itemCode)
+    {
+        List<InventoryItem> inventoryList = inventoryLists[(int)inventoryLocation];
+
+        int itemPosition = FindItemInInventory(inventoryLocation, itemCode);
+
+        if (itemPosition != -1)
+        {
+            AddItemAtPosition(inventoryList, itemCode, itemPosition);
+        }
+        else
+        {
+            // 优先寻找第一个空槽位填充
+            int emptySlot = FindFirstEmptySlot(inventoryList);
+            if (emptySlot != -1)
+            {
+                InventoryItem inventoryItem = new InventoryItem();
+                inventoryItem.itemCode = itemCode;
+                inventoryItem.itemQuantity = 1;
+                inventoryList[emptySlot] = inventoryItem;
+            }
+            else
+            {
+                // 没有空槽则追加（兼容原实现或扩容）
+                AddItemAtPosition(inventoryList, itemCode);
+            }
         }
         EventHandler.CallInventoryUpdatedEvent(inventoryLocation, inventoryLists[(int)inventoryLocation]);
     }
@@ -78,6 +134,19 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
         for (int i = 0; i < inventoryList.Count; i++)
         {
             if (inventoryList[i].itemCode == itemCode)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    // 返回第一个空槽位索引（itemCode == -1），找不到返回 -1
+    private int FindFirstEmptySlot(List<InventoryItem> inventoryList)
+    {
+        for (int i = 0; i < inventoryList.Count; i++)
+        {
+            if (inventoryList[i].itemCode == -1)
             {
                 return i;
             }
@@ -174,6 +243,16 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
         {
             RemoveItemAtPosition(inventoryList, itemCode, itemPosition);
         }
+
+        // 如果被选中的物品已被完全消耗（在库存中找不到），清除选中状态并确保玩家不再携带该物品
+        if (GetSelectedInventoryItem(inventoryLocation) == itemCode && FindItemInInventory(inventoryLocation, itemCode) == -1)
+        {
+            ClearSelectedInventoryItem(inventoryLocation);
+            if (Player.Instance != null)
+            {
+                Player.Instance.ClearCarriedItem();
+            }
+        }
         EventHandler.CallInventoryUpdatedEvent(inventoryLocation, inventoryLists[(int)inventoryLocation]);
     }
 
@@ -190,7 +269,11 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
         }
         else
         {
-            inventoryList.RemoveAt(itemPosition);
+            // 不移除元素，保留空占位以避免后续物品前移
+            InventoryItem empty = new InventoryItem();
+            empty.itemCode = -1;
+            empty.itemQuantity = 0;
+            inventoryList[itemPosition] = empty;
         }
 
     }
