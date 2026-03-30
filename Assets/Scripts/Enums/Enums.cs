@@ -55,6 +55,7 @@ public enum PartVariantType
 {
     none,
     carry,
+    axe,
     hoe,
     pickaxe,
     scythe,

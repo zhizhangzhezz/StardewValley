@@ -173,6 +173,7 @@ public class Player : SingletonMonobehaviour<Player>
                 case ItemType.HoeingTool:
                 case ItemType.WateringTool:
                 case ItemType.ReapingTool:
+                case ItemType.ChoppingTool:
                 case ItemType.CollectingTool:
                     ProcessPlayerClickInputTool(gridPropertyDetails, selectedItemDetails, playerDirection);
                     break;
@@ -264,11 +265,16 @@ public class Player : SingletonMonobehaviour<Player>
     //在光标处种下种子
     private void PlantSeedAtCursor(GridPropertyDetails gridPropertyDetails, ItemDetails itemDetails)
     {
-        gridPropertyDetails.seedItemCode = itemDetails.itemCode;
-        gridPropertyDetails.growthDays = 0;
-        GridPropertiesManager.Instance.DisplayPlantedCrops(gridPropertyDetails);
+        if (GridPropertiesManager.Instance.GetCropDetails(itemDetails.itemCode) != null)
+        {
+            gridPropertyDetails.seedItemCode = itemDetails.itemCode;
+            gridPropertyDetails.growthDays = 0;
+            GridPropertiesManager.Instance.DisplayPlantedCrops(gridPropertyDetails);
 
-        EventHandler.CallRemoveSelectedItemFromInventoryEvent();
+            EventHandler.CallRemoveSelectedItemFromInventoryEvent();
+        }
+
+
     }
 
     private void ProcessPlayerClickInputCommodity(ItemDetails itemDetails)
@@ -307,6 +313,12 @@ public class Player : SingletonMonobehaviour<Player>
                 {
                     playerDirection = GetPlayerDirection(cursor.GetWorldPositionForCursor(), GetPlayerCenterPosition());
                     ReapInPlayerDirection(itemDetails, playerDirection);
+                }
+                break;
+            case ItemType.ChoppingTool:
+                if (gridCursor.CursorPositionIsValid)
+                {
+                    ChopInPlayerDirection(gridPropertyDetails, itemDetails, playerDirection);
                 }
                 break;
             default:
@@ -425,6 +437,12 @@ public class Player : SingletonMonobehaviour<Player>
         StartCoroutine(CollectInPlayerDirectionRoutine(gridPropertyDetails, itemDetails, playerDirection));
     }
 
+    private void ChopInPlayerDirection(GridPropertyDetails gridPropertyDetails, ItemDetails itemDetails, Vector3Int playerDirection)
+    {
+        //播放动画
+        StartCoroutine(ChopInPlayerDirectionRoutine(gridPropertyDetails, itemDetails, playerDirection));
+    }
+
     private IEnumerator ReapInPlayerDirectionRoutine(ItemDetails itemDetails, Vector3Int playerDirection)
     {
         playerToolUseDisabled = true;
@@ -439,6 +457,26 @@ public class Player : SingletonMonobehaviour<Player>
         UseToolInPlayerDirection(itemDetails, playerDirection);
 
         yield return useToolAnimationPause;
+
+        playerToolUseDisabled = false;
+        PlayerInputIsDisabled = false;
+    }
+
+    private IEnumerator ChopInPlayerDirectionRoutine(GridPropertyDetails gridPropertyDetails, ItemDetails itemDetails, Vector3Int playerDirection)
+    {
+        playerToolUseDisabled = true;
+        PlayerInputIsDisabled = true;
+
+        //覆盖动画
+        toolCharacterAttribute.partVariantType = PartVariantType.axe;
+        characterAttributesCustomisationList.Clear();
+        characterAttributesCustomisationList.Add(toolCharacterAttribute);
+        animationOverrides.ApplyCharacterCustomisationParameters(characterAttributesCustomisationList);
+
+        ProcessCropWithEquippedItemInPlayerDirection(gridPropertyDetails, itemDetails, playerDirection);
+
+        yield return useToolAnimationPause;
+        yield return afterUseToolAnimationPause;
 
         playerToolUseDisabled = false;
         PlayerInputIsDisabled = false;
@@ -481,6 +519,24 @@ public class Player : SingletonMonobehaviour<Player>
                     parameters.isPickingDown = true;
                 }
                 break;
+            case ItemType.ChoppingTool:
+                if (playerDirection == Vector3Int.right)
+                {
+                    parameters.isUsingToolRight = true;
+                }
+                else if (playerDirection == Vector3Int.left)
+                {
+                    parameters.isUsingToolLeft = true;
+                }
+                else if (playerDirection == Vector3Int.up)
+                {
+                    parameters.isUsingToolUp = true;
+                }
+                else if (playerDirection == Vector3Int.down)
+                {
+                    parameters.isUsingToolDown = true;
+                }
+                break;
             case ItemType.none:
                 break;
         }
@@ -492,7 +548,10 @@ public class Player : SingletonMonobehaviour<Player>
             switch (itemDetails.itemType)
             {
                 case ItemType.CollectingTool:
-                    crop.ProcessToolAction(itemDetails);
+                    crop.ProcessToolAction(itemDetails, parameters.isPickingRight, parameters.isPickingLeft, parameters.isPickingDown, parameters.isPickingUp);
+                    break;
+                case ItemType.ChoppingTool:
+                    crop.ProcessToolAction(itemDetails, parameters.isUsingToolRight, parameters.isUsingToolLeft, parameters.isUsingToolDown, parameters.isUsingToolUp);
                     break;
             }
         }

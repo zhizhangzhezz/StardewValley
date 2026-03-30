@@ -684,6 +684,22 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 69f98cce6c9c888409dcaf514f219b77, type: 2}
   - {fileID: 11400000, guid: ecbd17e8b251e0a4db8badb6ada6184b, type: 2}
   - {fileID: 11400000, guid: 1c149ebcd624f1c4cacc201dffbb11b3, type: 2}
+  - {fileID: 11400000, guid: 9353301a691ecef4c97954d736f51fe9, type: 2}
+  - {fileID: 11400000, guid: 0e9b61026bf4bdf42bd11c84f5646c66, type: 2}
+  - {fileID: 11400000, guid: d888c41a787a6884683421b57e7dde80, type: 2}
+  - {fileID: 11400000, guid: 84f394be6e9048644b66515d93ec71cb, type: 2}
+  - {fileID: 11400000, guid: 003cb2f7f7c4326499ab0054bcfa4611, type: 2}
+  - {fileID: 11400000, guid: 6c0ff223c7bd3964cb60631d09f4d355, type: 2}
+  - {fileID: 11400000, guid: 841a1a19baec4f84c93a99ea286e0e44, type: 2}
+  - {fileID: 11400000, guid: f052eb8332ebc6e4285e2acb9549f038, type: 2}
+  - {fileID: 11400000, guid: 691d802da3dae054b9be38a2d6a1cd32, type: 2}
+  - {fileID: 11400000, guid: 58ad32cc16837c346b7b0fd3b6b0f135, type: 2}
+  - {fileID: 11400000, guid: ed5ac8d6f9f5fb642a5306e0f262b449, type: 2}
+  - {fileID: 11400000, guid: 130c79d716f9932469bd527640df4eda, type: 2}
+  - {fileID: 11400000, guid: ac13c892fdd655d4abf907724685bb84, type: 2}
+  - {fileID: 11400000, guid: 834ef00ea32218d43bea2620e309d995, type: 2}
+  - {fileID: 11400000, guid: 3304b7a9fc5137c44a817a6ac6b241bb, type: 2}
+  - {fileID: 11400000, guid: 0a54744dc81ced445812d7e87c8b6a90, type: 2}
 --- !u!1 &410835135
 GameObject:
   m_ObjectHideFlags: 0
@@ -2315,6 +2331,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d85ca585cd9b81d42903ae3c790e56bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deciduousLeavesFallingPrefab: {fileID: 838827450951090381, guid: b0ef97dc12dd0d34b855792fd3d2f81d,
+    type: 3}
+  choppingTreeTrunk: {fileID: 8506049551493369473, guid: bd8a58fd6e25b6046b671476aa0f8857,
+    type: 3}
   reapingPrefab: {fileID: 6390475510712397304, guid: 645462b281fa813418862fca0cfb574a,
     type: 3}
 --- !u!4 &1018046202
@@ -4049,6 +4069,11 @@ MonoBehaviour:
   pool:
   - poolSize: 10
     prefab: {fileID: 6390475510712397304, guid: 645462b281fa813418862fca0cfb574a,
+      type: 3}
+  - poolSize: 5
+    prefab: {fileID: 838827450951090381, guid: b0ef97dc12dd0d34b855792fd3d2f81d, type: 3}
+  - poolSize: 8
+    prefab: {fileID: 8506049551493369473, guid: bd8a58fd6e25b6046b671476aa0f8857,
       type: 3}
   objectPoolTransform: {fileID: 2025784583}
 --- !u!4 &2025784583

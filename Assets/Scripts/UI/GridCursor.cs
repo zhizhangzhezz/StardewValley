@@ -223,7 +223,7 @@ public class GridCursor : MonoBehaviour
                 {
                     return false;
                 }
-
+            case ItemType.ChoppingTool:
             case ItemType.CollectingTool:
                 //已有作物种植
                 if (gridPropertyDetails.seedItemCode != -1)
@@ -231,7 +231,7 @@ public class GridCursor : MonoBehaviour
                     CropDetails cropDetails = sO_CropDetailsList.GetCropDetails(gridPropertyDetails.seedItemCode);
                     if (cropDetails != null)
                     {
-                        if (gridPropertyDetails.growthDays >= cropDetails.totalGrowthDays)//已经成熟
+                        if (gridPropertyDetails.growthDays >= cropDetails.growthDays[cropDetails.growthDays.Length - 1])//已经成熟
                         {
                             if (cropDetails.CanUseToolToHarvestCrop(itemDetails.itemCode))
                             {
