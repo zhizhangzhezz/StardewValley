@@ -224,6 +224,7 @@ public class GridCursor : MonoBehaviour
                     return false;
                 }
             case ItemType.ChoppingTool:
+            case ItemType.BreakingTool:
             case ItemType.CollectingTool:
                 //已有作物种植
                 if (gridPropertyDetails.seedItemCode != -1)

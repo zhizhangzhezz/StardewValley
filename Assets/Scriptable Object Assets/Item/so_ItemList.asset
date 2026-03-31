@@ -213,7 +213,7 @@ MonoBehaviour:
     canBeDropped: 1
     canBeEaten: 0
     canBeCarried: 1
-  - itemCode: 1016
+  - itemCode: 10016
     itemType: 0
     itemDescription: Stone 2 Seed
     itemSprite: {fileID: 21300000, guid: ffd3a07e9702a614284d1e5a4be9f532, type: 3}

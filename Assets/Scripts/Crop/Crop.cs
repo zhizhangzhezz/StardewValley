@@ -98,6 +98,15 @@ public class Crop : MonoBehaviour
         {
             GetComponentInChildren<SpriteRenderer>().enabled = false;
         }
+        //防止收割动画把玩家推走
+        if (cropDetails.disableCropColliderBeforeHarvestedAnimation)
+        {
+            Collider2D[] colliders = GetComponentsInChildren<Collider2D>();
+            foreach (Collider2D collider in colliders)
+            {
+                collider.enabled = false;
+            }
+        }
 
         GridPropertiesManager.Instance.SetGridPropertyDetails(cropGridPosition.x, cropGridPosition.y, gridPropertyDetails);
 

@@ -130,7 +130,7 @@ public enum ItemType
 public enum HarvestActionEffect
 {
     deciduousLeavesFalling,
-    pinConesFalling,
+    pineConesFalling,
     choppingTreeTrunk,
     breakingStone,
     reaping,

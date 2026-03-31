@@ -92,3 +92,95 @@ MonoBehaviour:
     cropProducedMinQuantity: 02000000
     cropProducedMaxQuantity: 03000000
     daysToGrow: 0
+  - seedItemCode: 10009
+    growthDays: 00000000050000000a0000000f00000014000000
+    growthPrefabs:
+    - {fileID: 867136485622120852, guid: f2f8ba13492b872459063940d7e97ac9, type: 3}
+    - {fileID: 867136485622120852, guid: f2f8ba13492b872459063940d7e97ac9, type: 3}
+    - {fileID: 867136485622120852, guid: f2f8ba13492b872459063940d7e97ac9, type: 3}
+    - {fileID: 867136485622120852, guid: f2f8ba13492b872459063940d7e97ac9, type: 3}
+    - {fileID: 6332358591742284604, guid: b5877cc2dbe11994f88977763db29263, type: 3}
+    growthSprites:
+    - {fileID: 5616798495908862610, guid: 5d22327a2a3d2a049a8a59a708d527fe, type: 3}
+    - {fileID: -6947715560310228016, guid: 5d22327a2a3d2a049a8a59a708d527fe, type: 3}
+    - {fileID: 4303850705525679241, guid: 5d22327a2a3d2a049a8a59a708d527fe, type: 3}
+    - {fileID: 9217379939570758284, guid: 5d22327a2a3d2a049a8a59a708d527fe, type: 3}
+    - {fileID: 21300000, guid: 89c46045b5f23d840b62099f6f1f6344, type: 3}
+    seasons: 00000000010000000200000003000000
+    harvestedSprite: {fileID: 0}
+    harvestedTransformItemCode: 10011
+    hideCropBeforeHarvestedAnimation: 0
+    disableCropColliderBeforeHarvestedAnimation: 0
+    isHarvestedAnimation: 1
+    isHarvestActionEffect: 1
+    spawnCropProducedAtPlayerPosition: 0
+    harvestActionEffect: 1
+    harvestToolItemCode: 15270000
+    requiredHarvestActions: 05000000
+    cropProducedItemCode: 1827000019270000
+    cropProducedMinQuantity: 0300000001000000
+    cropProducedMaxQuantity: 0500000003000000
+    daysToGrow: 0
+  - seedItemCode: 10011
+    growthDays: 00000000
+    growthPrefabs:
+    - {fileID: 5224914725684016407, guid: d144290ff90f8e24383de344a2124243, type: 3}
+    growthSprites:
+    - {fileID: 21300000, guid: 89c46045b5f23d840b62099f6f1f6344, type: 3}
+    seasons: 00000000010000000200000003000000
+    harvestedSprite: {fileID: 0}
+    harvestedTransformItemCode: 0
+    hideCropBeforeHarvestedAnimation: 0
+    disableCropColliderBeforeHarvestedAnimation: 0
+    isHarvestedAnimation: 1
+    isHarvestActionEffect: 1
+    spawnCropProducedAtPlayerPosition: 0
+    harvestActionEffect: 2
+    harvestToolItemCode: 15270000
+    requiredHarvestActions: 03000000
+    cropProducedItemCode: 18270000
+    cropProducedMinQuantity: 01000000
+    cropProducedMaxQuantity: 03000000
+    daysToGrow: 0
+  - seedItemCode: 10014
+    growthDays: 00000000
+    growthPrefabs:
+    - {fileID: 4914806045861046602, guid: 0ea90ba63aeb9d74b896999961c5ca28, type: 3}
+    growthSprites:
+    - {fileID: 21300000, guid: 4fb548784c08c2c40b86a99493efa98d, type: 3}
+    seasons: 00000000010000000200000003000000
+    harvestedSprite: {fileID: 21300000, guid: 7700e9e59e6f58e4598ea8f2e5a84cc1, type: 3}
+    harvestedTransformItemCode: 0
+    hideCropBeforeHarvestedAnimation: 1
+    disableCropColliderBeforeHarvestedAnimation: 1
+    isHarvestedAnimation: 1
+    isHarvestActionEffect: 1
+    spawnCropProducedAtPlayerPosition: 1
+    harvestActionEffect: 3
+    harvestToolItemCode: 1d270000
+    requiredHarvestActions: 03000000
+    cropProducedItemCode: 1f270000
+    cropProducedMinQuantity: 01000000
+    cropProducedMaxQuantity: 03000000
+    daysToGrow: 0
+  - seedItemCode: 10016
+    growthDays: 00000000
+    growthPrefabs:
+    - {fileID: 4914806045861046602, guid: 34670e0d92a7b3948bd6291db6b6f2c0, type: 3}
+    growthSprites:
+    - {fileID: 21300000, guid: ffd3a07e9702a614284d1e5a4be9f532, type: 3}
+    seasons: 00000000010000000200000003000000
+    harvestedSprite: {fileID: 21300000, guid: 7700e9e59e6f58e4598ea8f2e5a84cc1, type: 3}
+    harvestedTransformItemCode: 0
+    hideCropBeforeHarvestedAnimation: 1
+    disableCropColliderBeforeHarvestedAnimation: 1
+    isHarvestedAnimation: 1
+    isHarvestActionEffect: 1
+    spawnCropProducedAtPlayerPosition: 1
+    harvestActionEffect: 3
+    harvestToolItemCode: 1d270000
+    requiredHarvestActions: 03000000
+    cropProducedItemCode: 1f270000
+    cropProducedMinQuantity: 01000000
+    cropProducedMaxQuantity: 03000000
+    daysToGrow: 0

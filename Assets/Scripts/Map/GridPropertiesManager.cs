@@ -9,6 +9,7 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
     private Transform cropParentTransform;
     private Tilemap groundDecoration1;
     private Tilemap groundDecoration2;
+    private bool isFirstTimeSceneLoaded = true;
     private Grid grid;
     private Dictionary<string, GridPropertyDetails> gridPropertyDetailsDictionary;
 
@@ -421,6 +422,9 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
                 this.gridPropertyDetailsDictionary = gridPropertyDetailsDictionary;
             }
 
+            sceneSave.boolDictionary = new Dictionary<string, bool>();
+            sceneSave.boolDictionary.Add("isFirstTimeSceneLoaded", true);
+
             GameObjectSave.sceneData.Add(so_gridProperties.sceneName.ToString(), sceneSave);
         }
     }
@@ -540,6 +544,9 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
         SceneSave sceneSave = new SceneSave();
         sceneSave.gridPropertyDetailsDictionary = gridPropertyDetailsDictionary;
 
+        sceneSave.boolDictionary = new Dictionary<string, bool>();
+        sceneSave.boolDictionary.Add("isFirstTimeSceneLoaded", this.isFirstTimeSceneLoaded);
+
         GameObjectSave.sceneData.Add(sceneName, sceneSave);
     }
 
@@ -551,11 +558,25 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
             {
                 gridPropertyDetailsDictionary = sceneSave.gridPropertyDetailsDictionary;
             }
+            //判断是否首次加载
+            if (sceneSave.boolDictionary != null && sceneSave.boolDictionary.TryGetValue("isFirstTimeSceneLoaded", out bool isFirstTimeSceneLoaded))
+            {
+                this.isFirstTimeSceneLoaded = isFirstTimeSceneLoaded;
+            }
+            if (this.isFirstTimeSceneLoaded)
+            {
+                EventHandler.CallInstantiateCropPrefabsEvent();
+            }
 
             if (gridPropertyDetailsDictionary != null)
             {
                 ClearDisplayGridPropertyDetails();
                 DisplayGridPropertyDetails();
+            }
+
+            if (this.isFirstTimeSceneLoaded)
+            {
+                this.isFirstTimeSceneLoaded = false;
             }
         }
     }
