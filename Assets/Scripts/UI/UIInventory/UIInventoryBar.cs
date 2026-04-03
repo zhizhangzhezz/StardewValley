@@ -131,4 +131,23 @@ public class UIInventoryBar : MonoBehaviour
             InventoryManager.Instance.SetSelectedInventoryItem(InventoryLocation.player, inventorySlot[slotNumber].itemDetails.itemCode);
         }
     }
+
+    public void DestroyCurrentDraggedItem()
+    {
+        for (int i = 0; i < inventorySlot.Length; ++i)
+        {
+            if (inventorySlot[i].draggedItem != null)
+            {
+                Destroy(inventorySlot[i].draggedItem);
+            }
+        }
+    }
+
+    public void ClearCurrentSelectedItem()
+    {
+        for (int i = 0; i < inventorySlot.Length; ++i)
+        {
+            inventorySlot[i].ClearSelectedItem();
+        }
+    }
 }

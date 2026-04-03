@@ -10,7 +10,7 @@ public class UIInventorySlot : MonoBehaviour, IDragHandler, IBeginDragHandler, I
     private Camera mainCamera;
     private Canvas parentCanvas;
     private Transform parentItem;
-    private GameObject draggedItem;
+    public GameObject draggedItem;
 
     private GridCursor gridCursor;
     private Cursor cursor;
@@ -251,7 +251,7 @@ public class UIInventorySlot : MonoBehaviour, IDragHandler, IBeginDragHandler, I
         }
     }
     //清除选中物品
-    private void ClearSelectedItem()
+    public void ClearSelectedItem()
     {
         ClearCursors();
         inventoryBar.ClearHighlightOnInventorySlots();
