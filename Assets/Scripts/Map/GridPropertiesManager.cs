@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(GenerateGUID))]
 public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManager>, ISavable
@@ -615,5 +616,23 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
         }
 
         DisplayGridPropertyDetails();
+    }
+
+    public void ISavableLoad(GameSave gameSave)
+    {
+        if (gameSave.gameObjectData.TryGetValue(ISavableUniqueID, out GameObjectSave gameObjectSave))
+        {
+            this.GameObjectSave = gameObjectSave;
+            //恢复场景
+            ISavableRestoreScene(SceneManager.GetActiveScene().name);
+        }
+    }
+
+    public GameObjectSave ISavableSave()
+    {
+        //保存场景
+        ISavableStoreScene(SceneManager.GetActiveScene().name);
+
+        return this.GameObjectSave;
     }
 }

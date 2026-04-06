@@ -1,12 +1,13 @@
-#if UNITY_EDITOR
+
 using UnityEditor;
-#endif
+
 using UnityEngine;
 using UnityEngine.Tilemaps;
 [ExecuteAlways]
 
 public class TilemapGridProperties : MonoBehaviour
 {
+#if UNITY_EDITOR
     private Tilemap tilemap;
     //private Grid grid;
     [SerializeField] private SO_GridProperties gridProperties = null;
@@ -32,9 +33,7 @@ public class TilemapGridProperties : MonoBehaviour
 
             if (gridProperties != null)
             {
-#if UNITY_EDITOR
                 EditorUtility.SetDirty(gridProperties);//标记为脏，触发自动保存
-#endif
             }
         }
     }
@@ -72,4 +71,5 @@ public class TilemapGridProperties : MonoBehaviour
             Debug.Log("禁用Property Tilemaps!");
         }
     }
+#endif
 }

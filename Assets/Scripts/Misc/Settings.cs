@@ -2,6 +2,9 @@
 
 public static class Settings
 {
+    //持久化场景
+    public const string PersistentScene = "PersistentScene";
+
     //场景物品淡入淡出
     public const float fadeInSeconds = 0.25f;
     public const float fadeOutSeconds = 0.35f;

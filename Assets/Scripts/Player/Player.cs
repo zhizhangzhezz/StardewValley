@@ -1,8 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class Player : SingletonMonobehaviour<Player>
+public class Player : SingletonMonobehaviour<Player>, ISavable
 {
     private WaitForSeconds afterUseToolAnimationPause;
     private WaitForSeconds afterLiftToolAnimationPause;
@@ -25,7 +27,7 @@ public class Player : SingletonMonobehaviour<Player>
 
     private Camera mainCamera;
 
-    private bool playerToolUseDisabled = false;
+
     private WaitForSeconds useToolAnimationPause;
     private WaitForSeconds liftToolAnimationPause;
     private WaitForSeconds pickAnimationPause;
@@ -33,7 +35,14 @@ public class Player : SingletonMonobehaviour<Player>
     private const float PIXELS_PER_UNIT = 16f;
     private const float PIXEL_STEP = 1f / PIXELS_PER_UNIT;
 
+    private bool playerToolUseDisabled = false;
     public bool PlayerInputIsDisabled { get => _playerInputIsDisbled; set => _playerInputIsDisbled = value; }
+
+    private string _iSavableUniqueID;
+    public string ISavableUniqueID { get => _iSavableUniqueID; set => _iSavableUniqueID = value; }
+
+    private GameObjectSave _gameObjectSave;
+    public GameObjectSave GameObjectSave { get => _gameObjectSave; set => _gameObjectSave = value; }
 
     protected override void Awake()
     {
@@ -49,6 +58,9 @@ public class Player : SingletonMonobehaviour<Player>
 
         characterAttributesCustomisationList = new List<CharacterAttribute>();
 
+        ISavableUniqueID = GetComponent<GenerateGUID>().GUID;
+        GameObjectSave = new GameObjectSave();
+
         mainCamera = Camera.main;
     }
 
@@ -57,11 +69,15 @@ public class Player : SingletonMonobehaviour<Player>
         //场景切换时禁用玩家移动
         EventHandler.BeforeSceneUnloadFadeOutEvent += DisablePlayerInputAndResetMovement;
         EventHandler.AfterSceneLoadFadeInEvent += EnablePlayerInput;
+
+        ISavableRegister();
     }
     private void OnDisable()
     {
         EventHandler.BeforeSceneUnloadFadeOutEvent -= DisablePlayerInputAndResetMovement;
         EventHandler.AfterSceneLoadFadeInEvent -= EnablePlayerInput;
+
+        ISavableDeregister();
     }
 
     private void Start()
@@ -798,5 +814,105 @@ public class Player : SingletonMonobehaviour<Player>
         EventHandler.CallMovementEvent(parameters);
     }
 
+    public void ISavableRegister()
+    {
+        SaveLoadManager.Instance.iSavableObjectList.Add(this);
+    }
+    public void ISavableDeregister()
+    {
+        SaveLoadManager.Instance.iSavableObjectList.Remove(this);
+    }
+    public GameObjectSave ISavableSave()
+    {
+        GameObjectSave.sceneData.Remove(Settings.PersistentScene);
 
+        SceneSave sceneSave = new SceneSave();
+        sceneSave.vector3Dictionary = new Dictionary<string, Vector3Serializable>();
+        sceneSave.stringDictionary = new Dictionary<string, string>();
+
+        Vector3Serializable vector3Serializable = new Vector3Serializable(transform.position.x, transform.position.y, transform.position.z);
+        //保存位置、方向、场景
+        sceneSave.vector3Dictionary.Add("playerPosition", vector3Serializable);
+        sceneSave.stringDictionary.Add("currentScene", SceneManager.GetActiveScene().name);
+        sceneSave.stringDictionary.Add("playerDirection", playerDirection.ToString());
+
+        GameObjectSave.sceneData.Add(Settings.PersistentScene, sceneSave);
+
+        return GameObjectSave;
+    }
+    public void ISavableLoad(GameSave gameSave)
+    {
+        if (gameSave.gameObjectData.TryGetValue(ISavableUniqueID, out GameObjectSave gameObjectSave))
+        {
+            if (gameObjectSave.sceneData.TryGetValue(Settings.PersistentScene, out SceneSave sceneSave))
+            {
+                //获取玩家位置
+                if (sceneSave.vector3Dictionary != null && sceneSave.vector3Dictionary.TryGetValue("playerPosition", out Vector3Serializable playerPosition))
+                {
+                    transform.position = new Vector3(playerPosition.x, playerPosition.y, playerPosition.z);
+                }
+                //获取玩家场景、方向
+                if (sceneSave.stringDictionary != null)
+                {
+                    if (sceneSave.stringDictionary.TryGetValue("currentScene", out string currentScene))
+                    {
+                        SceneControllerManager.Instance.FadeAndLoadScene(currentScene, transform.position);
+                    }
+
+                    // if (sceneSave.stringDictionary.TryGetValue("playerDirection", out string playerDirectionString))
+                    // {
+                    //     bool playerDirFound = Enum.TryParse<Direction>(playerDirectionString, true, out Direction savedPlayerDirection);
+                    //     if (playerDirFound)
+                    //     {
+                    //         playerDirection = savedPlayerDirection;
+                    //         SetPlayerDirection(playerDirection);
+                    //     }
+                    // }
+                }
+            }
+        }
+    }
+    public void ISavableStoreScene(string sceneName)
+    {
+
+    }
+    public void ISavableRestoreScene(string sceneName)
+    {
+
+    }
+
+    private void SetPlayerDirection(Direction direction)
+    {
+        switch (direction)
+        {
+            case Direction.up:
+                parameters.idleUp = true;
+                parameters.idleDown = false;
+                parameters.idleLeft = false;
+                parameters.idleRight = false;
+                EventHandler.CallMovementEvent(parameters);
+                break;
+            case Direction.down:
+                parameters.idleDown = true;
+                parameters.idleUp = false;
+                parameters.idleLeft = false;
+                parameters.idleRight = false;
+                EventHandler.CallMovementEvent(parameters);
+                break;
+            case Direction.left:
+                parameters.idleLeft = true;
+                parameters.idleUp = false;
+                parameters.idleDown = false;
+                parameters.idleRight = false;
+                EventHandler.CallMovementEvent(parameters);
+                break;
+            case Direction.right:
+                parameters.idleRight = true;
+                parameters.idleUp = false;
+                parameters.idleDown = false;
+                parameters.idleLeft = false;
+                EventHandler.CallMovementEvent(parameters);
+                break;
+        }
+    }
 }

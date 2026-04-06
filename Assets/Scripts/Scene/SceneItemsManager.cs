@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(GenerateGUID))]
 public class SceneItemsManager : SingletonMonobehaviour<SceneItemsManager>, ISavable
@@ -76,6 +77,24 @@ public class SceneItemsManager : SingletonMonobehaviour<SceneItemsManager>, ISav
     {
         SaveLoadManager.Instance.iSavableObjectList.Remove(this);
     }
+
+    public void ISavableLoad(GameSave gameSave)
+    {
+        if (gameSave.gameObjectData.TryGetValue(ISavableUniqueID, out GameObjectSave gameObjectSave))
+        {
+            this.GameObjectSave = gameObjectSave;
+
+            ISavableRestoreScene(SceneManager.GetActiveScene().name);
+        }
+    }
+
+    public GameObjectSave ISavableSave()
+    {
+        //保存场景
+        ISavableStoreScene(SceneManager.GetActiveScene().name);
+        return this.GameObjectSave;
+    }
+
     //存储场景中的物品
     public void ISavableStoreScene(string sceneName)
     {

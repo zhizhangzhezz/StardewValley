@@ -5,6 +5,10 @@ public interface ISavable
     GameObjectSave GameObjectSave { get; set; }
     void ISavableRegister();
     void ISavableDeregister();
+
+    GameObjectSave ISavableSave();
+    void ISavableLoad(GameSave gameSave);
+
     void ISavableStoreScene(string sceneName);
     void ISavableRestoreScene(string sceneName);
 }

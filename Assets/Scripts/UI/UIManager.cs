@@ -57,7 +57,7 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         HighlightButtonForSelectedTab();//设置按钮高亮
     }
 
-    private void DisableMenu()
+    public void DisableMenu()
     {
         pauseMenuInventoryManagement.DestroyCurrentDraggedItem();
 
@@ -111,6 +111,11 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         }
 
         HighlightButtonForSelectedTab();
+    }
+
+    public void QuitGame()//OnClick调用
+    {
+        Application.Quit();
     }
 
 }
