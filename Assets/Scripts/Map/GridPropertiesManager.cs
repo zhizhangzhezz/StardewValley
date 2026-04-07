@@ -635,4 +635,23 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
 
         return this.GameObjectSave;
     }
+    //获取地图网格大小
+    public bool GetGridDimensions(SceneName sceneName, out Vector2Int gridDimensions, out Vector2Int gridOrigin)
+    {
+        gridDimensions = Vector2Int.zero;
+        gridOrigin = Vector2Int.zero;
+
+        foreach (SO_GridProperties sO_GridProperties in so_gridPropertiesArray)
+        {
+            if (sO_GridProperties.sceneName == sceneName)
+            {
+                gridDimensions.x = sO_GridProperties.fieldWidth;
+                gridDimensions.y = sO_GridProperties.fieldHeight;
+                gridOrigin.x = sO_GridProperties.originX;
+                gridOrigin.y = sO_GridProperties.originY;
+                return true;
+            }
+        }
+        return false;
+    }
 }

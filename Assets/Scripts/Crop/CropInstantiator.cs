@@ -39,7 +39,8 @@ public class CropInstantiator : MonoBehaviour
         {
             GridPropertyDetails gridPropertyDetails = GridPropertiesManager.Instance.GetGridPropertyDetails(cropGridPosition.x, cropGridPosition.y);
 
-            if (gridPropertyDetails != null)
+            // 如果当前格子没有数据就新建一个，占位并避免空引用
+            if (gridPropertyDetails == null)
             {
                 gridPropertyDetails = new GridPropertyDetails();
             }
