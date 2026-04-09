@@ -12,7 +12,10 @@ public static class Settings
 
     //Tilemap
     public const float gridCellSize = 1f;
+    public const float gridCellDiagonalSize = 1.41f;
     public static Vector2 cursorSize = Vector2.one;
+    public const int maxGridWidth = 99999;
+    public const int maxGridHeight = 99999;
 
     //玩家从底部到中心的偏移
     public static float playerCenterOffset = 0.875f;
@@ -20,6 +23,14 @@ public static class Settings
     //玩家移动速度
     public const float runningSpeed = 8f;
     public const float walkingSpeed = 2.666f;
+
+    //npc移动
+    public static float pixelSize = 0.0625f;
+    public static int walkUp;
+    public static int walkDown;
+    public static int walkLeft;
+    public static int walkRight;
+    public static int eventAnimation;
 
     //玩家使用工具时暂停的时间
     public static float useToolAnimationPause = 0.25f;
@@ -84,6 +95,12 @@ public static class Settings
     // Static constructor
     static Settings()
     {
+        //npc
+        walkUp = Animator.StringToHash("walkUp");
+        walkDown = Animator.StringToHash("walkDown");
+        walkLeft = Animator.StringToHash("walkLeft");
+        walkRight = Animator.StringToHash("walkRight");
+        eventAnimation = Animator.StringToHash("eventAnimation");
 
         // Player Animation Parameters
         xInput = Animator.StringToHash("xInput");

@@ -267,4 +267,9 @@ public class TimeManager : SingletonMonobehaviour<TimeManager>, ISavable
     {
 
     }
+
+    public TimeSpan GetGameTime()
+    {
+        return new TimeSpan(gameHour, gameMinute, gameSecond);
+    }
 }

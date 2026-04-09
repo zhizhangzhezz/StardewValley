@@ -29,6 +29,8 @@ public class AStar : MonoBehaviour
 
     public bool BuildPath(SceneName sceneName, Vector2Int startGridPosition, Vector2Int targetGridPosition, Stack<NPCMovementStep> nPCMovementSteps)
     {
+        pathFound = false;
+
         if (PopulateGridNodesFromGridPropertiesDictionary(sceneName, startGridPosition, targetGridPosition))
         {
             if (FindShortestPath())
