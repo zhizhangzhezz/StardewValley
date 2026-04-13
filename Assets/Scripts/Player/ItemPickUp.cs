@@ -13,6 +13,9 @@ public class ItemPickUp : MonoBehaviour
             if (itemDetails.canBePickedup)
             {
                 InventoryManager.Instance.AddItem(InventoryLocation.player, item, collision.gameObject);
+
+                //播放音效
+                AudioManager.Instance.PlaySound(SoundName.effectPickupSound);
             }
         }
     }

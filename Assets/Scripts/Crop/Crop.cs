@@ -86,6 +86,11 @@ public class Crop : MonoBehaviour
                 animator.SetTrigger("harvestleft");
             }
         }
+        //播放音效
+        if (cropDetails.harvestSound != SoundName.none)
+        {
+            AudioManager.Instance.PlaySound(cropDetails.harvestSound);
+        }
 
         //重置地块属性
         gridPropertyDetails.seedItemCode = -1;

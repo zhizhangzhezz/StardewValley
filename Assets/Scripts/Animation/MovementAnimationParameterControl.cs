@@ -72,7 +72,7 @@ public class MovementAnimationParameterControl : MonoBehaviour
     // 动画事件：播放脚步声
     private void AnimationEventPlayFootstepSound()
     {
-        // 这里填播放脚步声逻辑
-        //AudioManager.Instance?.PlaySound(SoundName.Footstep);
+        //播放脚步声
+        AudioManager.Instance.PlaySound(SoundName.effectFootstepHardGround);
     }
 }

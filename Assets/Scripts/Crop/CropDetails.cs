@@ -20,7 +20,9 @@ public class CropDetails
     public bool isHarvestedAnimation;
     public bool isHarvestActionEffect = false;
     public bool spawnCropProducedAtPlayerPosition;
-    public HarvestActionEffect harvestActionEffect;
+    public HarvestActionEffect harvestActionEffect;//粒子特效
+    public SoundName harvestSound;//音效
+
 
     [ItemCodeDescription]
     public int[] harvestToolItemCode;

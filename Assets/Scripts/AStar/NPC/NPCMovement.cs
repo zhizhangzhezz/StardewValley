@@ -11,12 +11,12 @@ using UnityEngine.SceneManagement;
 [RequireComponent(typeof(BoxCollider2D))]
 public class NPCMovement : MonoBehaviour
 {
-    [HideInInspector] public SceneName npcCurrentScene;
+    public SceneName npcCurrentScene;
     [HideInInspector] public SceneName npcTargetScene;
     [HideInInspector] public Vector3Int npcCurrentGridPosition;
     [HideInInspector] public Vector3Int npcTargetGridPosition;
     [HideInInspector] public Vector3 npcTargetWorldPosition;
-    [HideInInspector] public Direction npcFacingDirectionAtDestination;
+    public Direction npcFacingDirectionAtDestination;
 
     private SceneName npcPreviousMovementStepScene;
     private Vector3Int npcNextGridPosition;
@@ -365,6 +365,27 @@ public class NPCMovement : MonoBehaviour
         animator.SetBool(Settings.eventAnimation, false);
 
         transform.rotation = Quaternion.identity;
+    }
+
+    //取消npc移动
+    public void CancelNPCMovement()
+    {
+        npcPath.ClearPath();
+        npcNextGridPosition = Vector3Int.zero;
+        npcNextWorldPosition = Vector3.zero;
+        npcIsMoving = false;
+
+        if (moveToGridPositionCoroutine != null)
+        {
+            StopCoroutine(moveToGridPositionCoroutine);
+        }
+
+        ResetMoveAnimation();
+        ClearNPCEventAnimation();
+
+        npcTargetAnimationClip = null;
+        ResetIdleAnimation();
+        SetIdleAnimation();
     }
 }
 
