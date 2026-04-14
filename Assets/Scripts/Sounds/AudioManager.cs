@@ -110,7 +110,7 @@ public class AudioManager : SingletonMonobehaviour<AudioManager>
     private void PlayAmbientSoundClip(SoundItem ambientSoundItem, float transitionTime)
     {
         //设置音量
-        gameAudioMixer.SetFloat("Ambientvolume", ConvertSoundVolume(ambientSoundItem.soundVolume));
+        gameAudioMixer.SetFloat("AmbientVolume", ConvertSoundVolume(ambientSoundItem.soundVolume));
 
         ambientSoundAudioSource.clip = ambientSoundItem.soundClip;
         ambientSoundAudioSource.Play();
@@ -127,7 +127,7 @@ public class AudioManager : SingletonMonobehaviour<AudioManager>
     private void PlayMusicSoundClip(SoundItem musicSoundItem, float transitionTime)
     {
         //设置音量
-        gameAudioMixer.SetFloat("Musicvolume", ConvertSoundVolume(musicSoundItem.soundVolume));
+        gameAudioMixer.SetFloat("MusicVolume", ConvertSoundVolume(musicSoundItem.soundVolume));
 
         gameMusicAudioSource.clip = musicSoundItem.soundClip;
         gameMusicAudioSource.Play();

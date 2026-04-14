@@ -62,6 +62,7 @@ SpriteAtlas:
     - f0d720006ae6c9e468cc99a9f1713ba1: 21300000
     - 25925800440b0e84f9533a314ddca6b5: 21300000
     - 7da78110e28e0f74aaa3ef4a41f4c0ed: 21300000
+    - db1e9a61b48dd5c4cbcf556a6f4c5625: 21300000
     - 207ad99171e171b418bcaaa396d5a6f6: 21300000
     - aa1fcd9144ccf574985824378256b95c: 21300000
     - 8298ab725cafa93429a58bd3e8273289: 21300000
@@ -241,6 +242,7 @@ SpriteAtlas:
     - 5a1df36ac90cfa242908df77f9674580: -4573777506729046043
     - 5a1df36ac90cfa242908df77f9674580: -8204859348171178890
     - 5a1df36ac90cfa242908df77f9674580: 6634833228405365077
+    - d987a17a3f1f13b4ba505131f153f688: 21300000
     - 5d22327a2a3d2a049a8a59a708d527fe: -2243126732310486641
     - 5d22327a2a3d2a049a8a59a708d527fe: 9217379939570758284
     - 5d22327a2a3d2a049a8a59a708d527fe: -8978622596343774240
@@ -897,6 +899,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: f0d720006ae6c9e468cc99a9f1713ba1, type: 3}
   - {fileID: 21300000, guid: 25925800440b0e84f9533a314ddca6b5, type: 3}
   - {fileID: 21300000, guid: 7da78110e28e0f74aaa3ef4a41f4c0ed, type: 3}
+  - {fileID: 21300000, guid: db1e9a61b48dd5c4cbcf556a6f4c5625, type: 3}
   - {fileID: 21300000, guid: 207ad99171e171b418bcaaa396d5a6f6, type: 3}
   - {fileID: 21300000, guid: aa1fcd9144ccf574985824378256b95c, type: 3}
   - {fileID: 21300000, guid: 8298ab725cafa93429a58bd3e8273289, type: 3}
@@ -1076,6 +1079,7 @@ SpriteAtlas:
   - {fileID: -4573777506729046043, guid: 5a1df36ac90cfa242908df77f9674580, type: 3}
   - {fileID: -8204859348171178890, guid: 5a1df36ac90cfa242908df77f9674580, type: 3}
   - {fileID: 6634833228405365077, guid: 5a1df36ac90cfa242908df77f9674580, type: 3}
+  - {fileID: 21300000, guid: d987a17a3f1f13b4ba505131f153f688, type: 3}
   - {fileID: -2243126732310486641, guid: 5d22327a2a3d2a049a8a59a708d527fe, type: 3}
   - {fileID: 9217379939570758284, guid: 5d22327a2a3d2a049a8a59a708d527fe, type: 3}
   - {fileID: -8978622596343774240, guid: 5d22327a2a3d2a049a8a59a708d527fe, type: 3}
@@ -1731,6 +1735,7 @@ SpriteAtlas:
   - Pumpkin
   - Weed1
   - ParsnipSeeds
+  - lantern
   - Grass1
   - Clock
   - TumbleweedThistle
@@ -1910,6 +1915,7 @@ SpriteAtlas:
   - ParsnipCrop_2
   - ParsnipCrop_1
   - ParsnipCrop_0
+  - Lamp
   - BlueSpruce_0
   - BlueSpruce_1
   - BlueSpruce_2

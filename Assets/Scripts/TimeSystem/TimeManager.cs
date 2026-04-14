@@ -272,4 +272,9 @@ public class TimeManager : SingletonMonobehaviour<TimeManager>, ISavable
     {
         return new TimeSpan(gameHour, gameMinute, gameSecond);
     }
+
+    public Season GetGameSeason()
+    {
+        return gameSeason;
+    }
 }
